@@ -24,6 +24,47 @@ api_paths = {
         "/v2.0/error-indicators",
         "/v2.0/machine-sizes",
         "/v2.0/delivery-methods"
+    ],
+    "codification": [
+        "/v1.0/admin/value-propositions",
+        "/v1.0/admin/promotions",
+        "/v1.0/admin/promotion-regular-expressions",
+        "/v1.0/admin/manufacturers",
+        "/v1.0/admin/listings",
+        "/v1.0/admin/data-variables",
+        "/v1.0/admin/categories",
+        "/v1.0/admin/brands",
+        "/v1.0/admin/brand-regular-expressions",
+        "/v1.0/admin/brand-country-manufacturers",
+        "/v1.0/admin/brand-category-regular-expressions",
+        "/v1.0/admin/brand-categories",
+        "/v1.0/admin/attributes",
+        "/v1.0/admin/attribute-options",
+        "/v1.0/admin/attribute-option-regular-expressions",
+        "/v1.0/admin/ads",
+        "/v1.0/admin/ad-categorizations"
+    ],
+    "backoffice": [
+        "/v1.0/admin/stores",
+        "/v1.0/admin/retailers",
+        "/v1.0/admin/locations",
+        "/v1.0/admin/country-groups",
+        "/v1.0/admin/country-group-countries",
+        "/v1.0/admin/country-group-clients",
+        "/v1.0/admin/clients",
+        "/v1.0/admin/locales",
+        "/v1.0/admin/countries"
+    ],
+    "seeds": [
+        "/v1.0/timeframes",
+        "/v1.0/tags",
+        "/v1.0/store-packages",
+        "/v1.0/seeds",
+        "/v1.0/seed-subscriptions",
+        "/v1.0/retailer-packages",
+        "/v1.0/jobs",
+        "/v1.0/boxes",
+        "/v1.0/box-subscriptions"
     ]
 }
 
