@@ -14,6 +14,8 @@ class TestFakeSeed(unittest.TestCase):
         self.assertIn("storeId", seed)
         self.assertIn("categoryId", seed)
 
+        self.assertIn("attributes", seed)
+
 
     def test_fake_seed_type_url(self):
 

@@ -25,7 +25,7 @@ def fake_seed(partial={}, environment="develop"):
         payload["storeId"] = store_id
 
 
-    seed_type = payload.get("attributes", {}).get("type", {})
+    seed_type = payload.get("attributes", {}).get("type", None)
     if seed_type is None:
         seed_type = random.choice(["URL", "API", "KEYWORD"])
 
