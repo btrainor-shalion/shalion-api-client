@@ -268,3 +268,26 @@ def fake_seed_subscriptions(partial={}, environment="develop"):
 
 
     return payload
+
+
+def fake_location(partial={}, environment="develop"):
+
+    payload = {
+        "name": f"QA location {random.randint(1000, 9999)}",
+        "storeId": None,
+        "locator": {"key": faker.Faker().word()},
+        "address": faker.Faker().address(),
+        "city": faker.Faker().city(),
+        "postalCode": faker.Faker().postcode(),
+        "isActive": random.choice([True, False])
+    }
+
+    # Override or add new payload keys
+    payload.update(partial)
+
+    if payload["storeId"] is None:
+        response = requests.get(build_url("stores", environment=environment, filters={"is_archived": False}))
+        store = random.choice(response.json())
+        payload["storeId"] = store["id"]
+
+    return payload
