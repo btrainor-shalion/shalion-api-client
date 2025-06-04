@@ -44,7 +44,9 @@ def create_job(partial={}, environment="develop"):
 def create_store_package(partial={}, environment="develop"):
 
     url = request_url_builder.build_url("store-packages", environment)
+    print(url)
     payload = seeds_api_payload_faker.fake_store_package(partial, environment)
+    print(json.dumps(payload))
     headers = {"accept": "application/json", "Content-Type": "application/json"}
 
     response = requests.post(url, json=payload, headers=headers)
