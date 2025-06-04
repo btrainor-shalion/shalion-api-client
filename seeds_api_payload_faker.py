@@ -184,3 +184,29 @@ def fake_retailer_package(partial={}, environment="develop"):
         payload["retailerId"] = retailer["id"]
 
     return payload
+
+
+def fake_tag(partial={}, environment="develop"):
+
+    payload = {
+        "name": f"QA tag {random.randint(1000, 9999)}",
+        "parentId": None,
+        "clientId": None
+    }
+
+    # Override or add new payload keys
+    payload.update(partial)
+
+    if payload["clientId"] not in payload:
+        response = requests.get(build_url("clients", environment=environment))
+        client_id = random.choice(response.json())["id"]
+        payload["clientId"] = client_id
+
+    has_parent = random.choice([True, False])
+    print("Has parent:", has_parent)
+    if has_parent:
+        response = requests.get(build_url("tags", environment=environment))
+        parent_id = random.choice(response.json())["id"]
+        payload["parentId"] = parent_id
+
+    return payload
