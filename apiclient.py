@@ -26,8 +26,11 @@ def get_seed(filters={}, environment="develop"):
     headers = {"accept": "application/json", "Content-Type": "application/json"}
     
     response = requests.get(url, headers=headers)
-
-    return random.choice(response.json())
+    seeds = response.json()
+    if len(seeds) == 0:
+        return None
+    else:
+        return random.choice(seeds)
 
 
 def create_job(partial={}, environment="develop"):
