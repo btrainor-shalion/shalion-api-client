@@ -151,6 +151,26 @@ def fake_store_package(partial={}, environment="develop"):
     # Override or add new payload keys
     payload.update(partial)
 
+    if payload["storeId"] is not None:
+
+        response = requests.get(build_url("stores", environment=environment, filters={"ids": payload["storeId"]}))
+        if not response.json():
+            raise ValueError(f"Store with ID {payload['storeId']} not found in environment {environment}")
+        store = response.json()[0]
+
+        if store["storeType"] == "GEOLOC":
+            payload["locationsConfig"]["geolocMode"] = "MANUAL"
+        elif store["storeType"] == "FLAGSHIP":
+            payload["locationsConfig"]["geolocMode"] = random.choice(["AUTOMATIC", "NO_GEOLOC"])
+
+        retailerId = store["retailer"]["id"]
+
+        retailer_package_payload = fake_retailer_package(partial={"retailerId": retailerId}, environment=environment)
+        retailer_packages_response = requests.post(build_url("retailer-packages", environment=environment), json=retailer_package_payload)
+        retailer_package = retailer_packages_response.json()
+        payload["retailerPackageId"] = retailer_package["id"]
+
+
     if payload["retailerPackageId"] is None:
         retailer_packages_response = requests.get(build_url("retailer-packages", environment=environment))
         retailer_package = random.choice(retailer_packages_response.json())
