@@ -53,7 +53,7 @@ def fake_seed(partial={}, environment="develop"):
 
     elif seed_type == "KEYWORD":
         payload["attributes"] = {
-            "keywordType": random.choice(["HOME", "CATEGORY", "SUBCATEGORY", "OFFERS"]),
+            "keywordType": random.choice(["CATEGORY", "BRANDED"]),
             "discoveryKey": faker.Faker().word(),
             "isFromDiscovery": random.choice([True, False]),
             "keyword": faker.Faker().word(),
