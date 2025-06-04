@@ -7,7 +7,7 @@ from request_url_builder import build_url
 def fake_seed(partial={}, environment="develop"):
 
     payload = {
-        "description": "string",
+        "description": f"QA random seed {random.randint(1000, 9999)}",
         "isQaCandidate": random.choice([True, False]),
     }
 
@@ -66,9 +66,9 @@ def fake_seed(partial={}, environment="develop"):
 
 
 def fake_tag(partial={}, environment="develop"):
-    
+
     payload = {
-        "name": f"QA tag {faker.Faker().word()}",
+        "name": f"QA tag {random.randint(1000, 9999)}",
         "parentId": None
     }
 
