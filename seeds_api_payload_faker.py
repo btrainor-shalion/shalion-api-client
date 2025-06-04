@@ -131,3 +131,38 @@ def fake_job(partial={}, environment="develop"):
     payload.update(partial)
 
     return payload
+
+
+def fake_store_package(partial={}, environment="develop"):
+
+    payload = {
+        "name": f"QA store package {random.randint(10000, 99999)}",
+        "locationsConfig": {
+            "geolocMode": random.choice(["AUTOMATIC", "MANUAL"]),
+        },
+        "isAdHoc": random.choice([True, False]),
+        "retailerPackageId": None,
+        "storeId": None,
+    }
+
+    # Override or add new payload keys
+    payload.update(partial)
+
+    if payload["retailerPackageId"] is None:
+        retailer_packages_response = requests.get(build_url("retailer-packages", environment=environment))
+        retailer_package = random.choice(retailer_packages_response.json())
+        payload["retailerPackageId"] = retailer_package["id"]
+
+        stores_response = requests.get(build_url("stores", environment=environment,
+                                          filters={"retailer_ids": retailer_package["retailer"]["id"]}))
+
+        store = random.choice(stores_response.json())
+        payload["storeId"] = store["id"]
+
+        if store["storeType"] == "GEOLOC":
+            payload["locationsConfig"]["geolocMode"] = "MANUAL"
+        elif store["storeType"] == "FLAGSHIP":
+            payload["locationsConfig"]["geolocMode"] = "AUTOMATIC"
+
+
+    return payload
