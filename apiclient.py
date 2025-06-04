@@ -94,6 +94,19 @@ def create_seed_subscriptions(partial={}, environment="develop"):
     return response
 
 
+def create_box_subscriptions(partial={}, environment="develop"):
+
+    url = request_url_builder.build_url("box-subscriptions", environment)
+    print(url)
+    payload = seeds_api_payload_faker.fake_box_subscriptions(partial, environment)
+    print(json.dumps(payload))
+    headers = {"accept": "application/json", "Content-Type": "application/json"}
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    return response
+
+
 def create_location(partial={}, environment="develop"):
 
     url = request_url_builder.build_url("locations", environment)
