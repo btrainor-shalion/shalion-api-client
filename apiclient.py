@@ -118,3 +118,15 @@ def create_location(partial={}, environment="develop"):
     response = requests.post(url, json=payload, headers=headers)
 
     return response
+
+
+def get_timeframe(filters={}, environment="develop"):
+
+    url = request_url_builder.build_url("timeframes", environment)
+    url += "?" + urlencode(filters)
+
+    headers = {"accept": "application/json", "Content-Type": "application/json"}
+
+    response = requests.get(url, headers=headers)
+
+    return random.choice(response.json())
