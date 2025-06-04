@@ -166,3 +166,21 @@ def fake_store_package(partial={}, environment="develop"):
 
 
     return payload
+
+
+def fake_retailer_package(partial={}, environment="develop"):
+
+    payload = {
+        "name": f"QA retailer package {random.randint(10000, 99999)}",
+        "retailerId": None,
+    }
+
+    # Override or add new payload keys
+    payload.update(partial)
+
+    if payload["retailerId"] is None:
+        response = requests.get(build_url("retailers", environment=environment))
+        retailer = random.choice(response.json())
+        payload["retailerId"] = retailer["id"]
+
+    return payload

@@ -50,3 +50,14 @@ def create_store_package(partial={}, environment="develop"):
     response = requests.post(url, json=payload, headers=headers)
 
     return response
+
+
+def create_retailer_package(partial={}, environment="develop"):
+
+    url = request_url_builder.build_url("retailer-packages", environment)
+    payload = seeds_api_payload_faker.fake_retailer_package(partial, environment)
+    headers = {"accept": "application/json", "Content-Type": "application/json"}
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    return response
