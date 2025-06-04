@@ -139,7 +139,7 @@ def fake_store_package(partial={}, environment="develop"):
     payload = {
         "name": f"QA store package {random.randint(10000, 99999)}",
         "locationsConfig": {
-            "geolocMode": random.choice(["AUTOMATIC", "MANUAL"]),
+            "geolocMode": None
         },
         "isAdHoc": random.choice([True, False]),
         "retailerPackageId": None,
@@ -163,7 +163,7 @@ def fake_store_package(partial={}, environment="develop"):
         if store["storeType"] == "GEOLOC":
             payload["locationsConfig"]["geolocMode"] = "MANUAL"
         elif store["storeType"] == "FLAGSHIP":
-            payload["locationsConfig"]["geolocMode"] = "AUTOMATIC"
+            payload["locationsConfig"]["geolocMode"] = random.choice(["AUTOMATIC", "NO_GEOLOC"])
 
 
     return payload
