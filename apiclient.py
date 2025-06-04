@@ -27,3 +27,16 @@ def get_seed(filters={}, environment="develop"):
     response = requests.get(url, headers=headers)
 
     return random.choice(response.json())
+
+
+def create_job(partial={}, environment="develop"):
+
+    url = request_url_builder.build_url("jobs", environment)
+    print(url)
+    payload = seeds_api_payload_faker.fake_job(partial, environment)
+    print(payload)
+    headers = {"accept": "application/json", "Content-Type": "application/json"}
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    return response

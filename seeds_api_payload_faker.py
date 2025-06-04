@@ -90,5 +90,44 @@ def fake_tag(partial={}, environment="develop"):
     return payload
 
 
-def fake_job(partial):
-    pass
+def fake_job(partial={}, environment="develop"):
+
+    payload = {
+        "name": f"QA job {random.randint(1000, 9999)}",
+        "destinationJobId": None,
+        "metadata": {
+            faker.Faker().word(): faker.Faker().word(),
+            faker.Faker().word(): faker.Faker().word()
+        },
+        "extractionConfig": {
+            "extractionType": random.choice(["SEARCH", "SHELF", "AD", "DIGITAL_SHELF_PLP", "DIGITAL_SHELF_PDP", "MEDIA"]),
+        }
+    }
+
+    response = requests.get(build_url("store-packages", environment=environment))
+
+    store_package = random.choice(response.json())
+    store_package_id = store_package["id"]
+    payload["storePackageId"] = store_package_id
+
+    store_package_geoloc_mode = store_package["geolocMode"]
+    if store_package_geoloc_mode == "AUTOMATIC":
+        payload["geolocMode"] = "AUTOMATIC"
+    else:
+        payload["geolocMode"] = "MANUAL"
+
+
+    if payload["extractionConfig"]["extractionType"] in ["SEARCH", "SHELF", "DIGITAL_SHELF_PLP", "MEDIA"]:
+        payload["extractionConfig"]["maxPages"] = random.randint(1, 10)
+        payload["extractionConfig"]["maxRank"] = random.randint(1, 100)
+
+    elif payload["extractionConfig"]["extractionType"] == "DIGITAL_SHELF_PDP":
+        payload["extractionConfig"]["hasToExtractMarketplace"] = random.choice([True, False])
+        payload["extractionConfig"]["hasToExtractReviews"] = random.choice([True, False])
+
+
+
+    # Override or add new payload keys
+    payload.update(partial)
+
+    return payload
