@@ -144,6 +144,8 @@ def fake_store_package(partial={}, environment="develop"):
         "isAdHoc": random.choice([True, False]),
         "retailerPackageId": None,
         "storeId": None,
+        "boxIds": [],
+        "locationIds": []
     }
 
     # Override or add new payload keys
@@ -164,6 +166,19 @@ def fake_store_package(partial={}, environment="develop"):
             payload["locationsConfig"]["geolocMode"] = "MANUAL"
         elif store["storeType"] == "FLAGSHIP":
             payload["locationsConfig"]["geolocMode"] = random.choice(["AUTOMATIC", "NO_GEOLOC"])
+
+
+    if payload["boxIds"] == []:
+        response = requests.get(build_url("boxes", environment=environment))
+        boxes = response.json()
+        if boxes:
+            payload["boxIds"] = random.sample([box["id"] for box in boxes], k=random.randint(1, len(boxes)))
+
+    if payload["locationIds"] == []:
+        response = requests.get(build_url("locations", environment=environment, filters={"store_id": payload["storeId"]}))
+        locations = response.json()
+        if locations:
+            payload["locationIds"] = random.sample([location["id"] for location in locations], k=random.randint(1, len(locations)))
 
 
     return payload
