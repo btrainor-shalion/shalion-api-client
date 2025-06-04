@@ -74,3 +74,16 @@ def create_tag(partial={}, environment="develop"):
     response = requests.post(url, json=payload, headers=headers)
 
     return response
+
+
+def create_seed_subscriptions(partial={}, environment="develop"):
+
+    url = request_url_builder.build_url("seed-subscriptions", environment)
+    print(url)
+    payload = seeds_api_payload_faker.fake_seed_subscriptions(partial, environment)
+    print(json.dumps(payload))
+    headers = {"accept": "application/json", "Content-Type": "application/json"}
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    return response

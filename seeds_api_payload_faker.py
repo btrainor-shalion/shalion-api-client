@@ -2,6 +2,7 @@ import requests
 import random
 import faker
 from request_url_builder import build_url
+from datetime import timedelta
 
 
 def fake_seed(partial={}, environment="develop"):
@@ -208,5 +209,47 @@ def fake_tag(partial={}, environment="develop"):
         response = requests.get(build_url("tags", environment=environment))
         parent_id = random.choice(response.json())["id"]
         payload["parentId"] = parent_id
+
+    return payload
+
+
+def fake_seed_subscriptions(partial={}, environment="develop"):
+
+    payload = {
+        "clientId": None,
+        "storePackageId": None,
+        "seedIds": [],
+        "isForDiscovery": random.choice([True, False]),
+        "validity": {
+            "dateFrom": None,
+            "dateTo": None
+        }
+    }
+
+    # Override or add new payload keys
+    payload.update(partial)
+
+    if payload["clientId"] is None:
+        response = requests.get(build_url("clients", environment=environment))
+        client = random.choice(response.json())
+        payload["clientId"] = client["id"]
+
+    if payload["storePackageId"] is None:
+        response = requests.get(build_url("store-packages", environment=environment))
+        storePackage = random.choice(response.json())
+        payload["storePackageId"] = storePackage["id"]
+
+    if payload["seedIds"] == []:
+        response = requests.get(build_url("seeds", environment=environment, filters={"store_package_ids": payload["storePackageId"]}))
+        seeds = response.json()
+        if seeds:
+            payload["seedIds"] = random.sample([seed["id"] for seed in seeds], k=random.randint(1, len(seeds)))
+
+    if payload["validity"]["dateFrom"] is None:
+        payload["validity"]["dateFrom"] = faker.Faker().date_time_this_year()
+        payload["validity"]["dateTo"] = payload["validity"]["dateFrom"] + timedelta(days=random.randint(1, 30))
+        payload["validity"]["dateFrom"] = payload["validity"]["dateFrom"].isoformat()[:-3] + "Z"
+        payload["validity"]["dateTo"] = payload["validity"]["dateTo"].isoformat()[:-3] + "Z"
+
 
     return payload
