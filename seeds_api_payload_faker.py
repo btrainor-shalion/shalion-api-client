@@ -275,7 +275,9 @@ def fake_seed_subscriptions(partial={}, environment="develop"):
         payload["storePackageId"] = storePackage["id"]
 
     if payload["seedIds"] == []:
-        response = requests.get(build_url("seeds", environment=environment, filters={"store_package_ids": payload["storePackageId"]}))
+        store_package_response = requests.get(build_url("store-packages", environment=environment, filters={"ids": payload["storePackageId"]}))
+        store_package = store_package_response.json()[0]
+        response = requests.get(build_url("seeds", environment=environment, filters={"store_ids": store_package["store"]["id"]}))
         seeds = response.json()
         if seeds:
             payload["seedIds"] = random.sample([seed["id"] for seed in seeds], k=random.randint(1, len(seeds)))
